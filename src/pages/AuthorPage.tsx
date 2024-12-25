@@ -40,7 +40,7 @@ const AuthorPage = () => {
 
   return (
     <AnimateLayout>
-    <Box>
+    <Box css={{overFlow:"hidden"}}>
         <Box px={'3'} top={'0'} py={'2'} w={'2xl'} css={{backdropFilter:'blur(5px)', zIndex:'1', background:'rgba(255, 255, 255, 0.65)', _dark:{background:'rgba(6, 6, 6, 0.65)'}}} position={'fixed'}>
             <HStack gap={'3'}>
                 <IconButton onClick={()=> router(-1)} colorPalette={'blue'} rounded={'full'} variant={'ghost'}>
