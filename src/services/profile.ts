@@ -29,7 +29,7 @@ export const profileApi = createApi({
    
     getProfile: build.query<SingleProfileReducerType, string | undefined>({
       query: (userId) => `/get-profile/${userId}`,
-      providesTags: (result, error, _id) => [{ type: 'Profiles', _id }],
+      providesTags: (_id) => [{ type: 'Profiles', _id }],
     }),
     updateProfile: build.mutation<ProfileReducerType, Partial<ProfileReducerType>>({
       query(data) {
@@ -43,7 +43,9 @@ export const profileApi = createApi({
       },
       // Invalidates all queries that subscribe to this Post `id` only.
       // In this case, `getPost` will be re-run. `getPosts` *might*  rerun, if this id was under its results.
-      invalidatesTags: (result, error, { _id }) => [{ type: 'Profiles', _id }],
+      invalidatesTags: (result, error, { _id }) =>{ 
+        console.log(result, error)
+        return [{ type: 'Profiles', _id }]},
     })
   }),
 })

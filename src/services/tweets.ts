@@ -84,7 +84,10 @@ export const tweetApi = createApi({
       },
       // Invalidates all queries that subscribe to this Post `id` only.
       // In this case, `getPost` will be re-run. `getPosts` *might*  rerun, if this id was under its results.
-      invalidatesTags: (result, error, { _id }) => [{ type: 'Posts', _id }],
+      invalidatesTags: (result, error, { _id }) => {
+        console.log(result, error);
+        return [{ type: 'Posts', _id }]
+      }
     }),
     deletePost: build.mutation<{ success: boolean; id: string | undefined }, string | undefined>({
       query(id) {

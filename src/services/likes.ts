@@ -1,4 +1,4 @@
-import { AddLikeParamsType, FollowMutateType, FollowStatus, LikeCountType,} from '@/lib/definitions'
+import { AddLikeParamsType, FollowStatus, LikeCountType,} from '@/lib/definitions'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 
@@ -58,7 +58,10 @@ export const likeApi = createApi({
       },
       // Invalidates all queries that subscribe to this Post `id` only.
       // In this case, `getPost` will be re-run. `getPosts` *might*  rerun, if this id was under its results.
-      invalidatesTags: (result, error, { _id }) => [{ type: 'Like', _id}],
+      invalidatesTags: (result, error, { _id }) => {
+        console.log(result, error);
+        return [{ type: 'Like', _id}]
+      },
     })
   }),
 })
