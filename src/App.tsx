@@ -71,14 +71,14 @@ const sessionYon = ()=>{
   }
 };
 const currentUserId = sessionUserId()
-const socket = io(`${import.meta.env.VITE_BACKEND_URL}`, { query: { userId: currentUserId } });
+
 
 function App() {
   const maid:any = sessionYon()
   const dispatch = useDispatch()
   dispatch(loginSession(maid))
 
-
+  const socket = io(`${import.meta.env.VITE_BACKEND_URL}`, { query: { userId: currentUserId } });
 
   useEffect(()=> {
     //socket.emit('sendNotification', "stanley12345"); // Join room for the user
