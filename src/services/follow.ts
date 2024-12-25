@@ -59,7 +59,10 @@ export const followApi = createApi({
       },
       // Invalidates all queries that subscribe to this Post `id` only.
       // In this case, `getPost` will be re-run. `getPosts` *might*  rerun, if this id was under its results.
-      invalidatesTags: ({ _id }) => [{ type: 'Follow', _id }],
+      invalidatesTags: (result, error,{ _id }) => {
+        console.log(result, error);
+       return [{ type: 'Follow', _id }]
+      },
     })
   }),
 })
