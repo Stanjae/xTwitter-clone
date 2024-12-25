@@ -86,11 +86,11 @@ function App() {
     socket.on('receiveNotification', (notification) => {
       toaster.create({type:'success',  placement:'top-end', title:`${notification?.name} ${notification?.content}`})
     });
-
+    console.log('loop')
     return () => {
       socket.disconnect()
     };
-  }, []);
+  }, [socket]);
 
 
   return (
