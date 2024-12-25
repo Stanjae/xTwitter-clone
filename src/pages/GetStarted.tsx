@@ -17,6 +17,7 @@ import { FileUploadList, FileUploadRoot, FileUploadTrigger } from "@/components/
 import { HiUpload } from "react-icons/hi"
 import { uploadFile } from '@uploadcare/upload-client'
 import { CustomButton } from "@/components/ui/customComponents/CustomButton"
+import { sessionUserId } from "@/utils/getStorageData"
 
 
 
@@ -24,6 +25,7 @@ import { CustomButton } from "@/components/ui/customComponents/CustomButton"
 
 const GetStarted = () => {
   const genders = createListCollection({items:genderList})
+  const userId = sessionUserId();
   //const navigate = useNavigate();
 
   const { register, handleSubmit, setValue, formState: { errors }, control } = useForm<ProfileType>({
@@ -36,7 +38,7 @@ const GetStarted = () => {
       }
     })
 
-   const handleUploadFiles = async(type:string, file:any)=>{
+   const handleUploadFiles = async(file:any)=>{
     const fileData = file.acceptedFiles.at(0)
     
     if(!fileData) return
@@ -52,22 +54,23 @@ const GetStarted = () => {
           }
         }
       )
-      if(type == "cover"){
-        setValue("coverPicture", result?.cdnUrl)
-      }else{
-        setValue("profilePicture", result?.cdnUrl)
-      }   
+      return result?.cdnUrl  
     }catch(err){
       console.log(err)
     }
    }
+   const setProfilePicture =async(file:any)=>{
+    const imageUrl = await handleUploadFiles(file);
+    setValue("profilePicture", imageUrl)
+   }
+
+   const setCoverPicture =async(file:any)=>{
+    const imageUrl = await handleUploadFiles(file);
+    setValue("coverPicture", imageUrl)
+   }
 
 
     const onSubmit=async(data:ProfileType)=>{
-      let userId = sessionStorage.getItem('tokenId')
-      if(userId){
-        userId = JSON.parse(userId)?.user?._id
-      }
       const response  = await CompleteProfile({...data, userId})
       if(response?.code == 201){
           toaster.create({title:response?.message, type:"success"})
@@ -151,7 +154,7 @@ const GetStarted = () => {
                       <StepsContent spaceY={'20px'} index={2}>
                         <Stack>
                         <input hidden {...register("profilePicture")}/>
-                          <FileUploadRoot accept={["image/png", "image/jpeg"]} onFileChange={async(file:any)=> await handleUploadFiles("profile",file)}>
+                          <FileUploadRoot accept={["image/png", "image/jpeg"]} onFileChange={async(file:any)=> await setProfilePicture(file)}>
                             <FileUploadTrigger asChild>
                               <Button variant="outline" size="sm">
                                 <HiUpload /> Upload Profile Picture
@@ -163,7 +166,7 @@ const GetStarted = () => {
                         <Separator />
                         <Stack>
                           <input hidden {...register("coverPicture")}/>
-                          <FileUploadRoot accept={["image/png", "image/jpeg"]} onFileChange={async(file:any)=> await handleUploadFiles("cover",file)}>
+                          <FileUploadRoot accept={["image/png", "image/jpeg"]} onFileChange={async(file:any)=> await setCoverPicture(file)}>
                               <FileUploadTrigger asChild>
                                 <Button variant="outline" size="sm">
                                   <HiUpload /> Upload Cover Picture
